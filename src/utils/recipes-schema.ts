@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { object } from "zod/v4";
 
 export const CategoriesAPIResponseSchema = z.object({
   drinks: z.array(
@@ -11,4 +12,14 @@ export const CategoriesAPIResponseSchema = z.object({
 export const SearchFilterSchema = z.object({
   ingredient: z.string(),
   category: z.string(),
+});
+
+export const DrinkAPIResponse = z.object({
+  idDrink: z.string(),
+  strDrink: z.string(),
+  strDrinkThumb: z.string(),
+});
+
+export const DrinksAPIResponse = z.object({
+  drinks: z.array(DrinkAPIResponse),
 });
