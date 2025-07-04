@@ -72,7 +72,7 @@ export default function Header() {
               Inicio
             </NavLink>
             <NavLink
-              to="/favoritos"
+              to="/favorites"
               className={({ isActive }) =>
                 isActive
                   ? "text-orange-500 uppercase font-bold"

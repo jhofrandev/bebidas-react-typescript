@@ -1,54 +1,51 @@
-import type { StateCreator } from "zustand";
-import {
-  getCategories,
-  getRecipeById,
-  getRecipes,
-} from "../services/RecipeService";
-import type { Categories, Drink, Drinks, Recipe, SearchFilter } from "../types";
+import { StateCreator } from 'zustand'
+import RecipeService from '../services/RecipeService'
+import type { Categories, Recipe, Drinks, SearchRecipe, ActiveRecipe } from '../types'
+import { FavoritesSlice } from './favoritesSlice'
+import { NotificationSlice } from './notificationSlice'
 
-export type RecipesSliceType = {
-  categories: Categories;
-  drinks: Drinks;
-  selectedRecipe: Recipe;
-  modal: boolean;
-  fetchCategories: () => Promise<void>;
-  searchRecipes: (searchRecipes: SearchFilter) => Promise<void>;
-  selectRecipe: (id: Drink["idDrink"]) => Promise<void>;
-  closeModal: () => void;
-};
+export type RecipesSlice = {
+  activeRecipe: ActiveRecipe,
+  categories: Categories,
+  drinks: Drinks,
+  modal: boolean,
+  fetchCategories: () => Promise<void>,
+  searchRecipes: (searchFilters: SearchRecipe) => Promise<void>,
+  selectRecipe: (id: Recipe['idDrink']) => Promise<void>,
+  closeModal: () => void
+}
 
-export const createRecipesSlice: StateCreator<RecipesSliceType> = (set) => ({
+export const createRecipesSlice : StateCreator<RecipesSlice & FavoritesSlice & NotificationSlice, [], [], RecipesSlice> = (set) => ({
+  activeRecipe: {} as Recipe,
   categories: {
-    drinks: [],
+    drinks: []
   },
-  drinks: {
-    drinks: [],
-  },
-  selectedRecipe: {} as Recipe,
   modal: false,
-  fetchCategories: async () => {
-    const categories = await getCategories();
-    set({
-      categories,
-    });
+  drinks: {
+    drinks: []
   },
-  searchRecipes: async (filters) => {
-    const drinks = await getRecipes(filters);
-    set({
-      drinks,
-    });
+  fetchCategories: async () => {
+    const categories = await RecipeService.getCategories()
+    set(() => ({
+      categories
+    }))
+  },
+  searchRecipes: async(searchFilters ) => {
+    const drinks = await RecipeService.searchRecipes(searchFilters)
+    set(() => ({
+      drinks
+    }))
   },
   selectRecipe: async (id) => {
-    const selectedRecipe = await getRecipeById(id);
-    set({
-      selectedRecipe,
-      modal: true,
-    });
+    const activeRecipe = await RecipeService.getRecipeById(id)
+    set(() => ({
+      activeRecipe,
+      modal: true
+    }))
   },
   closeModal: () => {
-    set({
-      modal: false,
-      selectedRecipe: {} as Recipe,
-    });
-  },
-});
+    set(() => ({
+      modal: false
+    }))
+  }
+})

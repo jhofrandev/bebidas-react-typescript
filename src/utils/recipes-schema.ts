@@ -1,29 +1,27 @@
-import { z } from "zod";
+import { z } from 'zod'
 
 export const CategoriesAPIResponseSchema = z.object({
-  drinks: z.array(
-    z.object({
-      strCategory: z.string(),
-    })
-  ),
+  drinks: z.array(z.object({
+    strCategory: z.string()
+  }))
 });
 
-export const SearchFilterSchema = z.object({
-  ingredient: z.string(),
+export const SearchRecipeSchema = z.object({
   category: z.string(),
-});
+  ingredient: z.string()
+})
 
 export const DrinkAPIResponse = z.object({
   idDrink: z.string(),
   strDrink: z.string(),
-  strDrinkThumb: z.string(),
-});
+  strDrinkThumb: z.string()
+})
 
 export const DrinksAPIResponse = z.object({
-  drinks: z.array(DrinkAPIResponse),
+  drinks: z.array(DrinkAPIResponse)
 });
 
-export const RecipeAPIResponseSchema = z.object({
+export const RecipeSchema = z.object({
   idDrink: z.string(),
   strDrink: z.string(),
   strDrinkThumb: z.string(),
